@@ -1,0 +1,46 @@
+# Dependency
+node_modules/
+
+# Build
+dist/
+build/
+
+# Sistem Editor
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Log dan laporan error
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Lingkungan dan konfigurasi lokal
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Output coverage (jika testing)
+coverage/
+
+# File OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.local
+*.lock-wscript
+*.swp
+*.tgz
+*.bak
+*.tmp
+*.orig
+
+# Files from signature pad (if exported to disk temporarily)
+signature*.png
