@@ -104,6 +104,8 @@ export default function FormPeserta() {
       [name]: value,
     }));
   };
+  
+  const sitekey = import.meta.env.VITE_TURNSTILE_SITEKEY;
 
   const resetForm = () => {
     setFormData({
@@ -314,7 +316,7 @@ export default function FormPeserta() {
                 >
                   <Turnstile
                     ref={turnstileRef}
-                    sitekey="0x4AAAAAABjCSlyNKJrqW6jq" // Ganti dengan milikmu
+                    sitekey={sitekey}
                     onSuccess={(token) => setCaptchaToken(token)}
                     style={{ width: '100%' }}
                   />
