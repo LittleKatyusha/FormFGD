@@ -17,6 +17,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import id from 'date-fns/locale/id'; // ← locale Indonesia
+import Select from 'react-select';
+
 registerLocale('id', id);
 
 // ⏬ Komponen DatePicker dengan auto open saat fokus
@@ -79,8 +81,34 @@ export default function FormPeserta() {
   const sigPadRef = useRef();
   const turnstileRef = useRef();
   const toast = useToast();
+  const [bankList, setBankList] = useState([]);
+
+    const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   useEffect(() => {
+    const fetchBanks = async () => {
+      try {
+        const res = await fetch('http://localhost:8000/api/banks');
+        const data = await res.json();
+        setBankList(data); // pastikan datanya array string
+      } catch (error) {
+        toast({
+          title: 'Gagal memuat daftar bank',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    };
+
+    fetchBanks();
+
     const resizeCanvas = () => {
       const canvas = sigPadRef.current?.getCanvas();
       if (!canvas) return;
@@ -97,13 +125,6 @@ export default function FormPeserta() {
     return () => window.removeEventListener('resize', resizeCanvas);
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
   
   const sitekey = import.meta.env.VITE_TURNSTILE_SITEKEY;
 
@@ -266,6 +287,28 @@ export default function FormPeserta() {
                       }))
                     }
                   />
+                ) :name === 'nama_bank' ? (
+                <Select
+                  inputId={name}
+                  name={name}
+                  placeholder="Pilih atau cari bank"
+                  options={bankList.map((bank) => ({
+                    label: bank,
+                    value: bank,
+                  }))}
+                  value={
+                    formData[name]
+                      ? { label: formData[name], value: formData[name] }
+                      : null
+                  }
+                  onChange={(selected) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      [name]: selected?.value || '',
+                    }))
+                  }
+                  isClearable
+                />
                 ) : (
                   <Input
                     id={name}
